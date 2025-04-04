@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Trợ Lý Ảo Học Tập AI</title>
 
     <!-- MathJax Configuration -->
@@ -20,6 +23,14 @@
     </script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- MathQuill Configuration -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    <script>
+        var MQ = MathQuill.getInterface(2);
+    </script>
 
 
     <!-- Bootstrap 5 CSS -->
@@ -66,13 +77,28 @@
                 <!-- Chat Area -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <div class="d-flex flex-column align-items-start">
-                            <div>
-                                <i class="fas fa-comment-alt me-2"></i>
-                                <span id="currentModeDisplay" class="fs-5 fw-bold">Trợ Lý</span>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column align-items-start">
+                                <div>
+                                    <i class="fas fa-comment-alt me-2"></i>
+                                    <span id="currentModeDisplay" class="fs-5 fw-bold">Trợ Lý</span>
+                                </div>
+                                <div class="ms-4">
+                                    <small class="fw-light">Trợ lý học tập thông minh đa môn học</small>
+                                </div>
                             </div>
-                            <div class="ms-4">
-                                <small class="fw-light">Trợ lý học tập thông minh</small>
+                            <div class="solution-mode-buttons">
+                                <div class="btn-group" role="group" aria-label="Chế độ giải bài">
+                                    <button type="button" class="btn btn-sm btn-outline-light solution-mode-btn active" data-mode="full">
+                                        <i class="fas fa-check-circle me-1"></i>Đầy đủ
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-light solution-mode-btn" data-mode="step_by_step">
+                                        <i class="fas fa-list-ol me-1"></i>Từng bước
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-light solution-mode-btn" data-mode="hint">
+                                        <i class="fas fa-lightbulb me-1"></i>Gợi ý
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,7 +111,7 @@
                                     <i class="fas fa-robot"></i>
                                 </div>
                                 <div class="message-text">
-                                    <p>Xin chào! Tôi là trợ lý học tập AI. Tôi có thể giúp bạn học tập và trả lời câu hỏi của bạn. Hãy đặt câu hỏi ngay nhé!</p>
+                                    <p>Xin chào! Tôi là trợ lý học tập đa năng. Tôi có thể giúp bạn giải bài tập, trả lời câu hỏi và phân tích thông tin về mọi chủ đề. Bạn có thể tải ảnh lên hoặc nhập câu hỏi của mình!</p>
                                 </div>
                             </div>
                         </div>
@@ -101,8 +127,63 @@
                                         placeholder="Nhập câu hỏi của bạn ở đây..." 
                                         rows="3"></textarea>
                             </div>
-                            <div class="d-flex justify-content-end align-items-center">
+                            <div class="math-input-container mb-2 d-none">
+                                <span id="mathInputLabel" class="text-muted mb-1">Nhập công thức toán học:</span>
+                                <div id="mathInput" class="form-control math-field"></div>
+                                <div class="math-preview mt-1">
+                                    <span class="text-muted me-2">Xem trước:</span>
+                                    <span id="mathPreview"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Image Upload Container -->
+                            <div class="image-upload-container mb-2 d-none">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-2">
+                                            <label for="imageInput" class="form-label text-muted">Chọn ảnh từ thiết bị của bạn:</label>
+                                            <input class="form-control" type="file" id="imageInput" accept="image/*">
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button id="captureImageButton" class="btn btn-primary" type="button">
+                                                <i class="fas fa-camera me-1"></i>Chụp ảnh
+                                            </button>
+                                            <button id="processImageButton" class="btn btn-success" type="button">
+                                                <i class="fas fa-magic me-1"></i>Phân tích nội dung ảnh
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="imagePreviewContainer" class="image-preview-container d-none">
+                                            <p class="text-muted mb-1">Xem trước ảnh:</p>
+                                            <img id="imagePreview" class="img-fluid img-thumbnail" src="" alt="Xem trước ảnh">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <small>Trợ lý AI sẽ phân tích trực tiếp nội dung từ ảnh của bạn. Hãy đảm bảo ảnh rõ ràng, không bị mờ và 
+                                        chứa đầy đủ nội dung cần phân tích.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
+                                    <button id="toggleMathButton" type="button" class="btn btn-outline-secondary me-2">
+                                        <i class="fas fa-square-root-alt me-1"></i>Công thức toán
+                                    </button>
+                                    <button id="toggleImageUploadButton" type="button" class="btn btn-outline-secondary me-2">
+                                        <i class="fas fa-camera me-1"></i>Tải ảnh lên
+                                    </button>
+                                    <button id="toggleDarkModeButton" type="button" class="btn btn-outline-secondary">
+                                        <i class="fas fa-moon me-1"></i><span id="darkModeText">Chế độ tối</span>
+                                    </button>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <button id="insertMathButton" class="btn btn-secondary me-2 d-none" type="button">
+                                        <i class="fas fa-plus me-1"></i>Chèn công thức
+                                    </button>
                                     <button id="sendButton" class="btn btn-primary" type="submit">
                                         <i class="fas fa-paper-plane me-1"></i>Gửi
                                     </button>
@@ -122,18 +203,51 @@
         </div>
     </footer>
 
-    <!-- Loading Overlay -->
+    <!-- Loading Overlay - Hiệu ứng xoay khi đang tải -->
     <div id="loadingOverlay" class="d-none">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Đang tải...</span>
         </div>
         <p class="mt-2 text-white">Đang tải câu trả lời...</p>
     </div>
-
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+    
+    <!-- Page Loading Indicator - Hiển thị khi trang đang tải -->
+    <div id="pageLoading" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+        <div class="text-center">
+            <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Đang tải trang...</span>
+            </div>
+            <p class="mt-3 text-white">Đang tải ứng dụng...</p>
+        </div>
+    </div>
+    
+    <!-- Camera Modal -->
+    <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cameraModalLabel">
+                        <i class="fas fa-camera me-2"></i>Chụp ảnh
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="camera-container">
+                        <div class="text-center mb-3">
+                            <p>Hãy đặt nội dung cần phân tích vào giữa khung hình và giữ ổn định</p>
+                        </div>
+                        <div class="video-container text-center">
+                            <video id="video" autoplay playsinline style="width: 100%; max-width: 640px; border: 2px solid #ccc; border-radius: 8px;"></video>
+                        </div>
+                        <canvas id="canvas" style="display:none;"></canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="takePhotoButton">
+                        <i class="fas fa-camera me-1"></i>Chụp ảnh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
