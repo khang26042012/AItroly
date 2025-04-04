@@ -1,115 +1,139 @@
 <!DOCTYPE html>
-<html lang="vi">  <!-- Xác định ngôn ngữ trang web là tiếng Việt -->
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">  <!-- Hỗ trợ hiển thị ký tự tiếng Việt -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Hỗ trợ responsive cho điện thoại -->
-    <title>Trợ Lý AI Học Tập</title>  <!-- Tiêu đề hiển thị trên tab trình duyệt -->
-    <style>
-        /* CSS cho toàn bộ trang */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Font chữ đẹp, dễ đọc */
-            background-color: #f5f5f5;  /* Màu nền xám nhẹ */
-            margin: 0;
-            padding: 0;
-            color: #333;  /* Màu chữ tối */
-        }
-        
-        /* Khung chứa toàn bộ nội dung */
-        .container {
-            max-width: 1000px;  /* Giới hạn chiều rộng tối đa */
-            margin: 20px auto;  /* Căn giữa và cách lề trên dưới 20px */
-            background: white;  /* Nền trắng */
-            border-radius: 10px;  /* Bo góc */
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);  /* Đổ bóng nhẹ */
-            overflow: hidden;  /* Ẩn nội dung tràn ra khỏi khung */
-        }
-        
-        /* Phần header có màu nền gradient */
-        .header {
-            background: linear-gradient(135deg, #4285f4, #34a853);  /* Gradient từ xanh dương sang xanh lá */
-            color: white;  /* Chữ màu trắng */
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-        
-        .header p {
-            margin: 10px 0 0;
-            opacity: 0.9;  /* Hơi trong suốt */
-        }
-        
-        /* Phần nội dung chính */
-        .content {
-            padding: 20px;
-        }
-        
-        /* Khung chứa iframe responsive */
-        .responsive-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-top: 75%;  /* Tỷ lệ khung hình 4:3 */
-        }
-        
-        /* Iframe nhúng ứng dụng Trợ lý AI */
-        .responsive-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 8px;
-        }
-        
-        /* Phần footer */
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        /* Quy tắc CSS cho màn hình di động */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 24px;  /* Giảm cỡ chữ trên mobile */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trợ Lý Ảo Học Tập AI</title>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
             }
-            .responsive-container {
-                padding-top: 100%;  /* Tỷ lệ cao hơn trên mobile */
-            }
-        }
-    </style>
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
 </head>
 <body>
-    <!-- Khung chứa toàn bộ nội dung -->
-    <div class="container">
-        <!-- Phần header -->
-        <div class="header">
-            <h1>Trợ Lý AI Học Tập</h1>
-            <p>Hệ thống trợ lý AI thông minh hỗ trợ học tập mọi môn học</p>
-        </div>
-        
-        <!-- Phần nội dung chính -->
-        <div class="content">
-            <!-- Khung chứa iframe -->
-            <div class="responsive-container">
-                <!-- Iframe nhúng ứng dụng từ Replit -->
-                <iframe class="responsive-iframe" src="https://vq.pike.replit.dev/" allowfullscreen></iframe>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="/">
+                <i class="fas fa-robot me-2"></i>Trợ Lý Học Tập AI
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <button id="clearHistoryBtn" class="nav-link btn btn-sm btn-outline-danger mx-1">
+                            <i class="fas fa-trash-alt me-1"></i>Xóa
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
-        
-        <!-- Phần footer -->
-        <div class="footer">
-            &copy; 2025 Trợ Lý AI Học Tập - Hỗ trợ học sinh, sinh viên học tập hiệu quả
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-3">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Chat Area -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex flex-column align-items-start">
+                            <div>
+                                <i class="fas fa-comment-alt me-2"></i>
+                                <span id="currentModeDisplay" class="fs-5 fw-bold">Trợ Lý</span>
+                            </div>
+                            <div class="ms-4">
+                                <small class="fw-light">Trợ lý học tập thông minh</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body chat-area" id="chatArea">
+                        <!-- Welcome Message -->
+                        <div class="chat-message bot-message">
+                            <div class="message-content">
+                                <div class="message-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="message-text">
+                                    <p>Xin chào! Tôi là trợ lý học tập AI. Tôi có thể giúp bạn học tập và trả lời câu hỏi của bạn. Hãy đặt câu hỏi ngay nhé!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat messages will be appended here -->
+                    </div>
+
+                    <!-- Message Input Area -->
+                    <div class="card-footer bg-light">
+                        <form id="messageForm">
+                            <div class="position-relative mb-2">
+                                <textarea id="messageInput" class="form-control" 
+                                        placeholder="Nhập câu hỏi của bạn ở đây..." 
+                                        rows="3"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <button id="sendButton" class="btn btn-primary" type="submit">
+                                        <i class="fas fa-paper-plane me-1"></i>Gửi
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">by: Phan Trọng Khang 7¹ | Trường THCS Vĩnh hòa</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Đang tải...</span>
+        </div>
+        <p class="mt-2 text-white">Đang tải câu trả lời...</p>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
